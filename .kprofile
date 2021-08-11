@@ -13,6 +13,23 @@
       kbash(){ K8S_SERVICE_NAME=$( kubectl get pods -n ${1} | grep ${2} | head -1 | awk '{print $1}') ; kubectl exec -it --stdin --tty ${K8S_SERVICE_NAME} -n ${1} -- /bin/bash ;}
     kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
 
+
+ksetKubeConf(){
+    mkdir -p /home/$USER/.kube
+    cp -f /etc/kubernetes/admin.conf /home/$USER/.kube/config
+    chown $USER:$USER /home/$USER/.kube/config
+
+    # - name: Setup kubeconfig for user
+    #   become: no
+    #   command: "{{ item }}"
+    #   with_items:
+    #     - mkdir -p /home/$USER/.kube
+    #     - sudo cp -i /etc/kubernetes/admin.conf /home/$USER/.kube/config
+    #     - sudo chown $USER:$USER /home/$USER/.kube/config
+}
+
+
+
 kbashNodeRoot(){
     # //Source: https://alexei-led.github.io/post/k8s_node_shell/
     node=${1}
