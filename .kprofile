@@ -8,7 +8,7 @@
 #/*******************************************************/
 
       kstat(){ watch kubectl get pods,svc,nodes,rc,rs,pv,pvc --all-namespaces ; }
-     kstatw(){ watch kubectl get pods,svc,nodes,rc,rs,pv,pvc --all-namespaces -o wide ; 
+     kstatw(){ watch kubectl get pods,svc,nodes,rc,rs,pv,pvc --all-namespaces -o wide ; }
    kbashcmd(){ NameSpace=${1} ; BashCommand="${2}" ; kubectl exec -it --namespace=${NameSpace} $(kubectl get pods -n ${NameSpace} | grep ${NameSpace} | awk '{print $1}') -- bash -c "${BashCommand}" ; }
     kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
       kbash(){ K8S_SERVICE_NAME=$( kubectl get pods -n ${1} | grep ${2} | head -1 | awk '{print $1}') ; kubectl exec -it --stdin --tty ${K8S_SERVICE_NAME} -n ${1} -- /bin/bash ;}
