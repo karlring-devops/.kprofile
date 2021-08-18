@@ -14,6 +14,13 @@
       kbash(){ K8S_SERVICE_NAME=$( kubectl get pods -n ${1} | grep ${2} | head -1 | awk '{print $1}') ; kubectl exec -it --stdin --tty ${K8S_SERVICE_NAME} -n ${1} -- /bin/bash ;}
     kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
 
+kdelobjs(){  #--- <object_type:pods,svc,nodes,rc,rs,pv,pvc,sts> <namespace> <REXGEX> 
+	K8S_OBJECT_NAMES=$(kubectl get ${1} -n ${2} | grep ${3} | head -1 | awk '{print $1}' ; )
+  for k in ${K8S_OBJECT_NAMES}
+  do
+  	kubectl delete -n ${2} ${1} ${k} --grace-period 0 --force
+  done
+}
 
 ksetKubeConf(){
     mkdir -p /home/$USER/.kube
