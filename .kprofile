@@ -22,6 +22,39 @@ kdelobjs(){  #--- <object_type:pods,svc,nodes,rc,rs,pv,pvc,sts> <namespace> <REX
   done
 }
 
+kmsghead(){
+	KMSG_KLINES='--------------'
+cat <<EOF
+ ${KMSG_KLINES}
+ ${1}
+ ${KMSG_KLINES} 
+EOF
+}
+
+kstata(){
+	runtime="5 minute"
+	endtime=$(date -ud "$runtime" +%s)
+while [[ $(date -u +%s) -le $endtime ]]
+do
+	clear
+	kmsghead Pods
+	kubectl get pods --all-namespaces -o wide
+	kmsghead Services
+	kubectl get svc
+	kmsghead Nodes
+	kubectl get nodes -o wide
+	kmsghead "Replica Sets"
+	kubectl get rs --all-namespaces
+	kmsghead "Persistent Volumnes"
+	kubectl get pv -o wide
+	kmsghead "Persistent Volumne Claims"
+	kubectl get pvc
+	kmsghead "Stateful Sets"
+	kubectl get sts --all-namespaces -o wide
+	sleep 20
+done
+}
+
 ksetKubeConf(){
     mkdir -p /home/$USER/.kube
     cp -f /etc/kubernetes/admin.conf /home/$USER/.kube/config
