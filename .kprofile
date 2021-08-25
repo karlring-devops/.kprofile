@@ -22,6 +22,16 @@ kdelobjs(){  #--- <object_type:pods,svc,nodes,rc,rs,pv,pvc,sts> <namespace> <REX
   done
 }
 
+kdashsetup(){
+  cd
+  mkdir -p .devops/
+  cd .devops/
+  rm -rf kubernetes-dashboard
+  git clone https://github.com/karlring-devops/kubernetes-dashboard.git
+  cd kubernetes-dashboard
+  . ./setup_k8s_dashboard.sh
+}
+
 kmsghead(){
 	KMSG_KLINES='--------------'
 cat <<EOF
