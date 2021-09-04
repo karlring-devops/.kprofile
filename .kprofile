@@ -67,8 +67,8 @@ done
 
 ksetKubeConf(){
     mkdir -p /home/$USER/.kube
-    cp -f /etc/kubernetes/admin.conf /home/$USER/.kube/config
-    chown $USER:$USER /home/$USER/.kube/config
+    sudo cp -f /etc/kubernetes/admin.conf /home/$USER/.kube/config
+    sudo chown $USER:$USER /home/$USER/.kube/config
 
     # - name: Setup kubeconfig for user
     #   become: no
