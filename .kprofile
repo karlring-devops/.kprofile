@@ -7,8 +7,8 @@
 #/***** kubernetes environ settings and functions *******/
 #/*******************************************************/
 
-      kstat(){ watch kubectl get pods,svc,nodes,ns,rc,rs,pv,pvc,sts,ds --all-namespaces ; }
-     kstatw(){ watch kubectl get pods,svc,nodes,ns,rc,rs,pv,pvc,sts,ds --all-namespaces -o wide ; }
+      kstat(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces ; }
+     kstatw(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces -o wide ; }
 
    kbashcmd(){ NameSpace=${1} ; BashCommand="${2}" ; kubectl exec -it --namespace=${NameSpace} $(kubectl get pods -n ${NameSpace} | grep ${NameSpace} | awk '{print $1}') -- bash -c "${BashCommand}" ; }
     kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
