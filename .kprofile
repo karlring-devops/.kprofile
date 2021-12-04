@@ -7,13 +7,14 @@
 #/***** kubernetes environ settings and functions *******/
 #/*******************************************************/
 
-      kstat(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces ; }
-     kstatw(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces -o wide ; }
+             kstat(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces ; }
+            kstatw(){ watch kubectl get pods,svc,nodes,deployment,ns,rc,rs,pv,pvc,sts,ds,sa --all-namespaces -o wide ; }
+          kbashcmd(){ NameSpace=${1} ; BashCommand="${2}" ; kubectl exec -it --namespace=${NameSpace} $(kubectl get pods -n ${NameSpace} | grep ${NameSpace} | awk '{print $1}') -- bash -c "${BashCommand}" ; }
+           kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
+             kbash(){ K8S_SERVICE_NAME=$( kubectl get pods -n ${1} | grep ${2} | head -1 | awk '{print $1}') ; kubectl exec -it --stdin --tty ${K8S_SERVICE_NAME} -n ${1} -- /bin/bash ;}
+           kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
+ kget_cluster_yaml(){ for x in `kubectl api-resources | awk '{print $1}'`; do sudo kubectl get ${x} --all-namespaces > ${x}.yaml; done; }
 
-   kbashcmd(){ NameSpace=${1} ; BashCommand="${2}" ; kubectl exec -it --namespace=${NameSpace} $(kubectl get pods -n ${NameSpace} | grep ${NameSpace} | awk '{print $1}') -- bash -c "${BashCommand}" ; }
-    kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
-      kbash(){ K8S_SERVICE_NAME=$( kubectl get pods -n ${1} | grep ${2} | head -1 | awk '{print $1}') ; kubectl exec -it --stdin --tty ${K8S_SERVICE_NAME} -n ${1} -- /bin/bash ;}
-    kdelpod(){ kubectl delete pod ${2} -n ${1} --grace-period 0 --force ; }
 
 kdelobjs(){  #--- <object_type:pods,svc,nodes,rc,rs,pv,pvc,sts> <namespace> <REXGEX> 
 	K8S_OBJECT_NAMES=$(kubectl get ${1} -n ${2} | grep ${3} | head -1 | awk '{print $1}' ; )
